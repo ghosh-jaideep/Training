@@ -136,7 +136,7 @@
     function deleteCompleted(){
         tasks.forEach(function(value, index){
             if(value.isDone==true){
-                tasks.splice(index, 1);
+                delete tasks[index];
             }
         });
         showTasks();
