@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>28)TODO-App(Its-all-there-is)</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+  <!-- <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
+  <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/> -->
+  <style>
+      .todo-item{
+        margin-top: 4px;
+        margin-left: 40px;
+      }
+      .float-left .checkbox{
+          padding-right: 10px;
+      }
+      .float-left .form-check-input{
+          margin-left: 10px;
+          padding-right: 10px;
+      }
+      .delete-btn{
+          font-size: 12px;
+      }
+    strike{
+        color: rgba(0, 0, 0, 0.3);
+    }
+  </style>
+</head>
+<body>
+<div class="container pt-5">
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <form class="form-inline" action="submit.php" method="post">
+                            <input type="text" id="item" class="form-control mb-2 mr-sm-2">
+                            <button type="submit" class="btn btn-primary mb-2" id="addItem">Add</button>
+                        </form>
+                    </div>
+                </div>
+                <br>
+                <div class="card">
+                        <ul class="list-group" id="taskList">
+                            <li class="list-group-item">
+                                    <div class="float-left">
+                                        <div class="checkbox">
+                                                <input type="checkbox" data-toggle="toggle" data-on="Completed" data-off="Active" data-size="sm">
+                                        </div>
+                                    </div>
+                                    <div class="todo-item">First item</div>
+                            </li>
+                        </ul>
+                </div>
+                <div class="card-footer" id="todoFooter">
+                        <button class="btn btn-outline-danger delete-btn" onclick="deleteCompleted();">Delete all completed tasks</button>
+                </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var tasks = [];
+    document.getElementById("addItem").addEventListener("click", function(e){
+        e.preventDefault();
+        var item = document.getElementById("item").value;
+        if (item != undefined && item != null && item!="") {
+            tasks.push({
+                caption: item,
+                isDone: false
+            });
+        }else{
+            alert("Enter a task caption.");
+        }
+        document.getElementById("item").value = "";
+        showTasks();
+    });
+    function showTasks(){
+        var taskList = document.getElementById("taskList");
+        taskList.innerHTML = "";
+        if(!tasks.length>0){
+            document.getElementById("todoFooter").style.display="none";
+            return;
+        }
+        document.getElementById("todoFooter").style.display="block";
+        tasks.forEach(function(value, index){
+            var li = document.createElement('li');
+            li.className = "list-group-item";
+
+            var divLeft = document.createElement('div');
+            divLeft.className = "float-left";
+            
+            var input = document.createElement("input");
+            input.type = "checkbox";
+            input.className = "form-check-input";
+            input.onclick = updateTasks;
+            input.value = index;
+            input.name = "tasks";
+            if(value.isDone){
+                input.checked="checked";
+            }
+            divLeft.appendChild(input);
+
+            var textNode = document.createTextNode(value.caption);
+            var div = document.createElement('div');
+            div.className = "todo-item";
+
+            if(value.isDone===true){
+                var strike = document.createElement('strike');
+                strike.appendChild(textNode);
+                div.appendChild(strike);
+            }else{
+                div.appendChild(textNode);
+            }
+            li.appendChild(divLeft);
+            li.appendChild(div);
+
+            taskList.appendChild(li);
+            // alert("Index is "+index+" and Value is: "+value.caption);
+        });
+    }
+    function updateTasks(){
+        var items = document.getElementsByClassName('form-check-input');
+        for(var i=0; i<items.length; i++){
+            if(items[i].checked==true){
+                tasks[items[i].value].isDone = true;
+            }else{
+                tasks[items[i].value].isDone = false;
+            }
+        }
+        showTasks();
+    }
+    function deleteCompleted(){
+        tasks.forEach(function(value, index){
+            if(value.isDone==true){
+                delete tasks[index];
+            }
+        });
+        showTasks();
+    }
+    window.onload = function(){
+        showTasks();
+    };
+</script>
+</body>
+</html>
