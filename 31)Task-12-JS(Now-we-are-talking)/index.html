@@ -16,9 +16,24 @@
             }
         }
         // Test Examples for using the above class TodoItem.
-        TodoItem.caption = "Test 1";
-        TodoItem.toggle();
-        console.log(TodoItem);
+        // TodoItem.caption = "Test 1";
+        // TodoItem.toggle();
+        // console.log(TodoItem);
+
+        var TodoApp = {
+            TodoCollection: [],
+            render: function(){
+                this.TodoCollection.forEach(function(value, index){
+                    console.log(index+ " : "+value.caption);
+                });
+            },
+            addItem: function(caption){
+                TodoItem.caption = caption;
+                this.TodoCollection.push(TodoItem);
+                this.render();
+            }
+        }
+        
     </script>
 </body>
 </html>
