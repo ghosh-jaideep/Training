@@ -98,7 +98,10 @@
             input.className = "form-check-input";
             input.onclick = updateTasks;
             input.value = index;
-            input.name = "tasks"
+            input.name = "tasks";
+            if(value.isDone){
+                input.checked="checked";
+            }
             divLeft.appendChild(input);
 
             var textNode = document.createTextNode(value.caption);
@@ -120,19 +123,14 @@
         });
     }
     function updateTasks(){
-        selectedItems = "";
-        var items   =   document.getElementsByName('tasks');
+        var items = document.getElementsByClassName('form-check-input');
         for(var i=0; i<items.length; i++){
-            // console.log(items[i]);
-            if(items[i].type=='checkbox' && items[i].checked==true){
-                selectedItems+=items[i].value+"\n";
-                tasks[items[i].value] = {
-                    caption: tasks[items[i].value].caption,
-                    isDone: true
-                }
+            if(items[i].checked==true){
+                tasks[items[i].value].isDone = true;
+            }else{
+                tasks[items[i].value].isDone = false;
             }
         }
-        console.log(tasks);
         showTasks();
     }
     function deleteCompleted(){
