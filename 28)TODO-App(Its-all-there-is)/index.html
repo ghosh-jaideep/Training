@@ -32,7 +32,6 @@
   </style>
 </head>
 <body>
-  
 <div class="container pt-5">
     <div class="row d-flex justify-content-center align-items-center">
         <div class="col-md-6">
@@ -57,7 +56,7 @@
                             </li>
                         </ul>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer" id="todoFooter">
                         <button class="btn btn-outline-danger delete-btn" onclick="deleteCompleted();">Delete all completed tasks</button>
                 </div>
         </div>
@@ -84,8 +83,10 @@
         var taskList = document.getElementById("taskList");
         taskList.innerHTML = "";
         if(!tasks.length>0){
+            document.getElementById("todoFooter").style.display="none";
             return;
         }
+        document.getElementById("todoFooter").style.display="block";
         tasks.forEach(function(value, index){
             var li = document.createElement('li');
             li.className = "list-group-item";
