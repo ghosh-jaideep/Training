@@ -47,5 +47,17 @@
         </div>
     </div>
 </div>
+
+<script>
+        $("#addItem").click(function(e){
+            e.preventDefault();
+            item = $("#item").val();
+            if (item != undefined && item != null && item!="") {
+                console.log("Item Captured.");
+            }else{
+                alert("Enter a task caption.");
+            }
+        });
+    </script>
 </body>
 </html>
