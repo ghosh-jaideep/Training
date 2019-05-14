@@ -40,15 +40,6 @@
                             <button type="submit" class="btn btn-primary mb-2" id="addItem">Add Task</button>
                         </form>
                         <ul class="list-group" id="taskList">
-                            <li class="list-group-item">
-                                    <div class="todo-item">First item</div>
-                            </li>
-                            <li class="list-group-item">
-                                    <div class="todo-item">Second item</div>
-                            </li>
-                            <li class="list-group-item">
-                                    <div class="todo-item">Third item</div>
-                            </li>
                         </ul>
                     </div>
                 </div>
@@ -59,7 +50,21 @@
 <script>
     document.getElementById("addItem").onclick = function(e){
         e.preventDefault();
-        console.log("Yes! the click handler is working.");
+        // console.log("Yes! the click handler is working.");
+        var item = document.getElementById("item").value;
+        if (item != undefined && item != null && item!="") {
+            var li = document.createElement('li');
+            li.className = "list-group-item";
+            var textNode = document.createTextNode(item);
+            var div = document.createElement('div');
+            div.className = "todo-item";
+            div.appendChild(textNode);
+            li.appendChild(div);
+            taskList.appendChild(li);
+        }else{
+            alert("Enter a task caption.");
+        }
+        document.getElementById("item").value = "";
     };
 </script>
 </body>
