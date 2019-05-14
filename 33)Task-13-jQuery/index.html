@@ -49,15 +49,45 @@
 </div>
 
 <script>
+        function TodoItem(caption) {
+            this.caption = caption,
+            this.isCompleted = false,
+            this.toggle = function(){
+                this.isCompleted = !this.isCompleted;
+            }
+        }
+        function TodoApp(){
+            this.TodoCollection = [],
+            this.render = function(){
+                $('#item').val("");
+                $('#taskList').empty();
+                $.each(this.TodoCollection, function( index, value ) {
+                    var li = document.createElement('li');
+                    li.className = "list-group-item";
+                    var textNode = document.createTextNode(value.caption);
+                    var div = document.createElement('div');
+                    div.className = "todo-item";
+                    div.appendChild(textNode);
+                    li.appendChild(div);
+                    $("#taskList").append(li);
+                });
+            },
+            this.addItem = function(caption){
+                var todoItem = new TodoItem(caption);
+                this.TodoCollection.push(todoItem);
+                this.render();
+            }
+        }
+        todoApp = new TodoApp();
         $("#addItem").click(function(e){
             e.preventDefault();
             item = $("#item").val();
             if (item != undefined && item != null && item!="") {
-                console.log("Item Captured.");
+                todoApp.addItem(item);
             }else{
                 alert("Enter a task caption.");
             }
         });
-    </script>
+</script>
 </body>
 </html>
