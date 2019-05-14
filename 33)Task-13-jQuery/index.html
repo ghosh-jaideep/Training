@@ -61,6 +61,7 @@
             this.render = function(){
                 $('#item').val("");
                 $('#taskList').empty();
+                
                 $.each(this.TodoCollection, function( index, value ) {
                     var li = document.createElement('li');
                     li.className = "list-group-item";
@@ -75,10 +76,32 @@
             this.addItem = function(caption){
                 var todoItem = new TodoItem(caption);
                 this.TodoCollection.push(todoItem);
-                this.render();
+                // this.render();
+
+                $.get("data.php?method=save&item="+caption, function(data, status){
+                        response = JSON.parse(data);
+                        if(response.status==true){
+                            alert("Task added.");
+                        }else{
+                            alert(response.message);
+                        }
+                });
+
             }
         }
         todoApp = new TodoApp();
+
+        $(document).ready(function(){
+            $.get("data.php?method=get", function(data, status){
+                    response = JSON.parse(data);
+                    if(response.status==true){
+                        todoApp.TodoCollection = response.data;
+                        todoApp.render();
+                    }
+            });
+            todoApp.render();
+        });
+
         $("#addItem").click(function(e){
             e.preventDefault();
             item = $("#item").val();
