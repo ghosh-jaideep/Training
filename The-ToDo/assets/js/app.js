@@ -2,6 +2,12 @@ let TodoCollection = []
 $(document).ready(() => {
     // Fetch tasks from API, and Render them in List-view when document is ready
     fetchTasks()
+    // Change the list-view to input field whenever a list item is clicked.
+    $(document).on("click", ".todo-item" , (e) => {
+        let id = $(e.target).data("id")
+        let value = $(e.target).text()
+        $(e.target).closest(".list-group-item").replaceWith(inLineEditorTemplate(value, id));
+    })
     //Manage Form submit for adding new task.
     $("#todoForm").submit(( e )=>{
         e.preventDefault()
@@ -64,6 +70,20 @@ let listTemplate = (caption, i, isCompleted) => {
                 )
             )
         )
+}
+
+/**
+ * It returns the html form template for inline editing.
+ * @param {string} caption 
+ */
+let inLineEditorTemplate = (caption, id) => {
+    return $('<li/>',{'class':'list-group-item'}).append(
+        $('<form/>',{'name':'editor', class:'editor'}).append(
+            $('<input/>',{type:'text', 'class':'form-control', 'name':'caption', 'value':caption})
+        ).append(
+            $('<input/>',{type:'hidden', 'name':'id', 'value':id})
+        )
+    )
 }
 
 /**
