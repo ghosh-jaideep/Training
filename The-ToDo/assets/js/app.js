@@ -113,17 +113,18 @@ let render = (TodoCollection) => {
  * Fetch all the Todo Tasks from API.
  * @return mixed
  */
-function fetchTasks(){
+async function fetchTasks(){
     //Get data from API
-    let response = $.get("api.php?method=get",(response, status)=>{
-        if(response.status==true){
-            let tasks = response.data
+    await fetch('api.php?method=get')
+        .then(response => response.json())
+        .then(data => {
+            let tasks = data.data
             tasks.forEach((value,index)=>{
                 TodoCollection[value.id]=value
             });
             render(TodoCollection)
-        }
-    })
+        })
+        .catch(error => console.error(error))
 }
 
 /**
