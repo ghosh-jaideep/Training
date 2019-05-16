@@ -2,6 +2,16 @@ let TodoCollection = []
 $(document).ready(() => {
     // Fetch tasks from API, and Render them in List-view when document is ready
     fetchTasks()
+    //Manage Form submit for adding new task.
+    $("#todoForm").submit(( e )=>{
+        e.preventDefault()
+        let item = $("#item").val();
+        if(item){
+            addTask(item)
+        }else{
+            alert("Enter task caption.")
+        }
+    });
 })
 
 /**
@@ -79,6 +89,27 @@ function fetchTasks(){
     })
 }
 
+/**
+ * To add Task in the list.
+ * @param {string} caption 
+ * @return null
+ */
+let addTask = (caption) => {
+    $.get("api.php?method=save&item="+caption, (response, status) => {
+            if(response.status==true){
+                alert("Task added.");
+                $('#item').val("");
+                TodoCollection.push({
+                    "id":  TodoCollection.length,
+                    "caption" :  caption,
+                    "isCompleted" :  false
+                })
+                $("#taskList").append(listTemplate(caption, TodoCollection.length, false));
+            }else{
+                alert(response.message);
+            }
+    });
+}
 
 /**
  * For updating the task status.
