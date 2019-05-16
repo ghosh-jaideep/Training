@@ -13,11 +13,13 @@ $(document).ready(() => {
             e.preventDefault()
             let caption = e.target['caption'].value
             let id = e.target['id'].value
-            TodoCollection[id].caption = caption
-            updateTask(id)
+            if(TodoCollection[id].caption!=caption){
+                TodoCollection[id].caption = caption
+                updateTask(id)
+            }
             $(e.target).closest(".list-group-item").replaceWith(listTemplate(caption, id, TodoCollection[id].isCompleted));
-    });
-    
+    })
+
     //Manage Form submit for adding new task.
     $("#todoForm").submit(( e )=>{
         e.preventDefault()
@@ -27,7 +29,7 @@ $(document).ready(() => {
         }else{
             alert("Enter task caption.")
         }
-    });
+    })
     // Trigger the Delete function whenever the delete button is cicked.
     $(document).on("click", ".btn-dlt" , (e) => {
         let id = $(e.target).attr("value");
