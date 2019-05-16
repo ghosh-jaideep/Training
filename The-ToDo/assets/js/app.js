@@ -140,5 +140,30 @@ let deleteData = (id) => {
  * @param {event} e 
  */
 let updateStatus = (e) => {
-    console.log("Updating Status")
+    if(e.currentTarget.checked == true){
+        TodoCollection[e.currentTarget.value].isCompleted = true
+    }else{
+        TodoCollection[e.currentTarget.value].isCompleted = false
+    }
+    let taskId = e.currentTarget.value
+    updateTask(taskId)
+    $(e.target).closest(".list-group-item").replaceWith(listTemplate(TodoCollection[taskId].caption, taskId, TodoCollection[taskId].isCompleted));
+}
+
+/**
+ * For updating the task.
+ * @param {integer} id 
+ */
+let updateTask = (id) => {
+    $.post(
+        "api.php?method=update&id="+id,
+        { data: TodoCollection[id] },
+        (response, status)=>{
+            if(response.status==true){
+                console.log("Task Updated.");
+            }else{
+                alert(response.message);
+            }
+    });
+    // render(TodoCollection)
 }
