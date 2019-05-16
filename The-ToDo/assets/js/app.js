@@ -17,7 +17,7 @@ $(document).ready(() => {
                 TodoCollection[id].caption = caption
                 updateTask(id)
             }
-            $(e.target).closest(".list-group-item").replaceWith(listTemplate(caption, id, TodoCollection[id].isCompleted));
+            // $(e.target).closest(".list-group-item").replaceWith(listTemplate(caption, id, TodoCollection[id].isCompleted));
     })
 
     //Manage Form submit for adding new task.
@@ -186,25 +186,33 @@ let updateStatus = (e) => {
     }
     let taskId = e.currentTarget.value
     updateTask(taskId)
-    $(e.target).closest(".list-group-item").replaceWith(listTemplate(TodoCollection[taskId].caption, taskId, TodoCollection[taskId].isCompleted));
+    // $(e.target).closest(".list-group-item").replaceWith(listTemplate(TodoCollection[taskId].caption, taskId, TodoCollection[taskId].isCompleted));
 }
 
 /**
  * For updating the task.
  * @param {integer} id 
  */
-let updateTask = (id) => {
-    $.post(
-        "api.php?method=update&id="+id,
-        { data: TodoCollection[id] },
-        (response, status)=>{
-            if(response.status==true){
-                console.log("Task Updated.");
-            }else{
-                alert(response.message);
-            }
-    });
-    // render(TodoCollection)
+let updateTask = async (id) => {
+    await fetch("api.php",{
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({method: 'update', id: id, data: TodoCollection[id]})
+    })
+    .then(response => response.json())
+    .then(data => {
+        let status = data.status
+        if(status===true){
+            alert("Task Updated.")
+            $('#item').val("")
+            fetchTasks()
+        }else{
+            alert(data.message)
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 /**

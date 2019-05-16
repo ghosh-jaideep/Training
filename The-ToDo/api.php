@@ -60,7 +60,7 @@ if(isset($_REQUEST["method"]) && !empty($_REQUEST["method"])){
                 foreach($_REQUEST["data"] as $key=>$value){
                     // $value = ($key=="isCompleted")?(bool)$value:$value;
                     if($key == "isCompleted"){
-                        $value = ($value == "false")?0:1;
+                        $value = ($value == 1)?1:0;
                     }
                     if(gettype($value)=="boolean" || gettype($value)=="integer")
                         $updateQuery .= $key."=".$value." ";
