@@ -1,6 +1,9 @@
 <?php
 header("Content-Type: application/json");
 require_once("connection.php");
+
+$request = json_decode(file_get_contents("php://input"),true);
+$_REQUEST = (!empty($request))?$request:$_REQUEST;
 $response = array(
     "status"    =>  false,
     "message"   =>  "",
@@ -57,7 +60,7 @@ if(isset($_REQUEST["method"]) && !empty($_REQUEST["method"])){
                 foreach($_REQUEST["data"] as $key=>$value){
                     // $value = ($key=="isCompleted")?(bool)$value:$value;
                     if($key == "isCompleted"){
-                        $value = ($value == "false")?0:1;
+                        $value = ($value == 1)?1:0;
                     }
                     if(gettype($value)=="boolean" || gettype($value)=="integer")
                         $updateQuery .= $key."=".$value." ";
