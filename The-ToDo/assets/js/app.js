@@ -8,6 +8,16 @@ $(document).ready(() => {
         let value = $(e.target).text()
         $(e.target).closest(".list-group-item").replaceWith(inLineEditorTemplate(value, id));
     })
+    //Process the inline editor form submit
+    $('#taskList').on("submit", ".editor", function(e) {
+            e.preventDefault()
+            let caption = e.target['caption'].value
+            let id = e.target['id'].value
+            TodoCollection[id].caption = caption
+            updateTask(id)
+            $(e.target).closest(".list-group-item").replaceWith(listTemplate(caption, id, TodoCollection[id].isCompleted));
+    });
+    
     //Manage Form submit for adding new task.
     $("#todoForm").submit(( e )=>{
         e.preventDefault()
