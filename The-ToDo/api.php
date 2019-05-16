@@ -1,6 +1,9 @@
 <?php
 header("Content-Type: application/json");
 require_once("connection.php");
+
+$request = json_decode(file_get_contents("php://input"),true);
+$_REQUEST = (!empty($request))?$request:$_REQUEST;
 $response = array(
     "status"    =>  false,
     "message"   =>  "",

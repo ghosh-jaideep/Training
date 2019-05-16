@@ -132,21 +132,27 @@ async function fetchTasks(){
  * @param {string} caption 
  * @return null
  */
-let addTask = (caption) => {
-    $.get("api.php?method=save&item="+caption, (response, status) => {
-            if(response.status==true){
-                alert("Task added.");
-                $('#item').val("");
-                TodoCollection.push({
-                    "id":  TodoCollection.length,
-                    "caption" :  caption,
-                    "isCompleted" :  false
-                })
-                $("#taskList").append(listTemplate(caption, TodoCollection.length, false));
-            }else{
-                alert(response.message);
-            }
-    });
+let addTask = async (caption) => {
+    await fetch("api.php",{
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({method: 'save', item: caption})
+    })
+    .then(response => response.json())
+    .then(data => {
+        let status = data.status
+        if(status===true){
+            alert("Task added.")
+            $('#item').val("")
+            fetchTasks()
+            // $("#taskList").append(listTemplate(caption, TodoCollection.length, false));
+        }else{
+            alert(data.message)
+        }
+    })
+    .catch(error => console.error(error))
 }
 
 /**
