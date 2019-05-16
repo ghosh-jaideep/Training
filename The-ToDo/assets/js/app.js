@@ -12,6 +12,11 @@ $(document).ready(() => {
             alert("Enter task caption.")
         }
     });
+    // Trigger the Delete function whenever the delete button is cicked.
+    $(document).on("click", ".btn-dlt" , (e) => {
+        let id = $(e.target).attr("value");
+        deleteData(id)
+    })
 })
 
 /**
@@ -105,6 +110,25 @@ let addTask = (caption) => {
                     "isCompleted" :  false
                 })
                 $("#taskList").append(listTemplate(caption, TodoCollection.length, false));
+            }else{
+                alert(response.message);
+            }
+    });
+}
+
+/**
+ * For deleting the task from record.
+ * @param {integer} id 
+ */
+let deleteData = (id) => {
+    $.get("api.php?method=delete&id="+id, (response, status) => {
+            // let response = JSON.parse(data);
+            if(response.status==true){
+                alert(response.message);
+                TodoCollection = TodoCollection.filter((elem) => {
+                    return elem.id != id; 
+                });
+                render(TodoCollection)
             }else{
                 alert(response.message);
             }
