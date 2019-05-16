@@ -167,3 +167,19 @@ let updateTask = (id) => {
     });
     // render(TodoCollection)
 }
+
+/**
+ * For sorting the TodoCollection
+ * @param {string|bool} type
+ * @return null 
+ */
+let sortTask = (type) => {
+    if(type=="all")
+        sortedTask = TodoCollection
+    else{
+        sortedTask = TodoCollection.filter((elem) => {
+            return type === elem.isCompleted; 
+        });
+    }
+    render(sortedTask)
+}
