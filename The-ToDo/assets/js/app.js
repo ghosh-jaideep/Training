@@ -31,8 +31,8 @@ $(document).ready(() => {
         }
     })
     // Trigger the Delete function whenever the delete button is cicked.
-    $(document).on("click", ".btn-dlt" , (e) => {
-        let id = $(e.target).attr("value");
+    $(document).on("click", ".list-group-item" , (e) => {
+        let id = $(e.target).closest(".btn-dlt").attr("value");
         deleteData(id)
     })
 })
