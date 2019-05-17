@@ -31,8 +31,8 @@ $(document).ready(() => {
         }
     })
     // Trigger the Delete function whenever the delete button is cicked.
-    $(document).on("click", ".btn-dlt" , (e) => {
-        let id = $(e.target).attr("value");
+    $(document).on("click", ".list-group-item" , (e) => {
+        let id = $(e.target).closest(".btn-dlt").attr("value");
         deleteData(id)
     })
 })
@@ -143,7 +143,7 @@ let addTask = async (caption) => {
     .then(response => response.json())
     .then(data => {
         let status = data.status
-        if(status===true){
+        if(status){
             alert("Task added.")
             $('#item').val("")
             fetchTasks()
@@ -159,19 +159,25 @@ let addTask = async (caption) => {
  * For deleting the task from record.
  * @param {integer} id 
  */
-let deleteData = (id) => {
-    $.get("api.php?method=delete&id="+id, (response, status) => {
-            // let response = JSON.parse(data);
-            if(response.status==true){
-                alert(response.message);
-                TodoCollection = TodoCollection.filter((elem) => {
-                    return elem.id != id; 
-                });
-                render(TodoCollection)
-            }else{
-                alert(response.message);
-            }
-    });
+let deleteData = async (id) => {
+    await fetch("api.php",{
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({method: 'delete', id: id})
+    })
+    .then(response => response.json())
+    .then(data => {
+        let status = data.status
+        if(status){
+            alert(data.message)
+            fetchTasks()
+        }else{
+            alert(data.message)
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 /**
@@ -179,7 +185,7 @@ let deleteData = (id) => {
  * @param {event} e 
  */
 let updateStatus = (e) => {
-    if(e.currentTarget.checked == true){
+    if(e.currentTarget.checked){
         TodoCollection[e.currentTarget.value].isCompleted = true
     }else{
         TodoCollection[e.currentTarget.value].isCompleted = false
@@ -204,7 +210,7 @@ let updateTask = async (id) => {
     .then(response => response.json())
     .then(data => {
         let status = data.status
-        if(status===true){
+        if(status){
             alert("Task Updated.")
             $('#item').val("")
             fetchTasks()
