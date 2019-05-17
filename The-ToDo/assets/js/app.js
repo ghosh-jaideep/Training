@@ -143,7 +143,7 @@ let addTask = async (caption) => {
     .then(response => response.json())
     .then(data => {
         let status = data.status
-        if(status===true){
+        if(status){
             alert("Task added.")
             $('#item').val("")
             fetchTasks()
@@ -162,7 +162,7 @@ let addTask = async (caption) => {
 let deleteData = (id) => {
     $.get("api.php?method=delete&id="+id, (response, status) => {
             // let response = JSON.parse(data);
-            if(response.status==true){
+            if(response.status){
                 alert(response.message);
                 TodoCollection = TodoCollection.filter((elem) => {
                     return elem.id != id; 
@@ -179,7 +179,7 @@ let deleteData = (id) => {
  * @param {event} e 
  */
 let updateStatus = (e) => {
-    if(e.currentTarget.checked == true){
+    if(e.currentTarget.checked){
         TodoCollection[e.currentTarget.value].isCompleted = true
     }else{
         TodoCollection[e.currentTarget.value].isCompleted = false
@@ -204,7 +204,7 @@ let updateTask = async (id) => {
     .then(response => response.json())
     .then(data => {
         let status = data.status
-        if(status===true){
+        if(status){
             alert("Task Updated.")
             $('#item').val("")
             fetchTasks()
