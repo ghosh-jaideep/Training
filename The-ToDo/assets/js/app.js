@@ -159,19 +159,25 @@ let addTask = async (caption) => {
  * For deleting the task from record.
  * @param {integer} id 
  */
-let deleteData = (id) => {
-    $.get("api.php?method=delete&id="+id, (response, status) => {
-            // let response = JSON.parse(data);
-            if(response.status){
-                alert(response.message);
-                TodoCollection = TodoCollection.filter((elem) => {
-                    return elem.id != id; 
-                });
-                render(TodoCollection)
-            }else{
-                alert(response.message);
-            }
-    });
+let deleteData = async (id) => {
+    await fetch("api.php",{
+        method: 'POST',
+        headers:{
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({method: 'delete', id: id})
+    })
+    .then(response => response.json())
+    .then(data => {
+        let status = data.status
+        if(status){
+            alert(data.message)
+            fetchTasks()
+        }else{
+            alert(data.message)
+        }
+    })
+    .catch(error => console.error('Error:', error));
 }
 
 /**
